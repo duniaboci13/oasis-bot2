@@ -5,7 +5,14 @@ AI inference powered by distributed compute
 
 # Features
 
-![Banner](image.png)
+## New Features
+- **Enhanced and Clearer logging time** 
+
+- **Total Bandwidth Used**
+
+- **Clearer Total Uptime for Provider**
+
+## Features
 
 - **Register/Login Accounts**
 
@@ -17,7 +24,7 @@ AI inference powered by distributed compute
 
 - **Support Proxy**
 
-## Requirements
+# Requirements
 
 - **Node.js**: Ensure you have Node.js installed.
 
@@ -27,12 +34,12 @@ put your proxy in file `proxy.txt` format `http://username:pass@ip:port` 1 proxy
 
 so if you want create multiple providers you need to put multiple proxy there.
 
-## Setup
+# Setup
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/Zlkcyber/oasis-bot.git
+   git clone https://github.com/federicoalie/oasis-bot.git
    cd oasis-bot
    ```
 
@@ -74,3 +81,6 @@ so if you want create multiple providers you need to put multiple proxy there.
 ## ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 This project is licensed under the [MIT License](LICENSE).
+
+# Source
+https://github.com/Zlkcyber/oasis-bot
