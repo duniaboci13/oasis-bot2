@@ -3,6 +3,9 @@
 ![banner](image-1.png)
 AI inference powered by distributed compute
 
+# [Register Here](https://r.oasis.ai/fra1156)
+
+
 # Features
 
 ## New Features
