@@ -30,14 +30,18 @@ AI inference powered by distributed compute
 # Requirements
 
 - **Node.js**: Ensure you have Node.js installed.
+  Check if node.js is installed.
+     ```bash
+     node -v
+     ```
 
 - **NPM**: Ensure you have npm installed.
-
-put your proxy in file `proxy.txt` format `http://username:pass@ip:port` 1 proxy for 1 provider
-
-so if you want create multiple providers you need to put multiple proxy there.
-
-# Setup
+  Check if NPM (Node Package Manager) is installed.
+     ```bash
+     npm --v
+     ```
+     
+# How to Use
 
 1. Clone this repository:
 
@@ -58,7 +62,7 @@ so if you want create multiple providers you need to put multiple proxy there.
    nano accounts.txt
    ```
 
-4. put your proxy to `proxy.txt`
+4. put your proxy to `proxy.txt` format `http://username:pass@ip:port`, if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider.
 
    ```bash
    nano proxy.txt
