@@ -4,6 +4,32 @@ import { generateRandomId, generateRandomSystemData } from "./system.js";
 import { delay } from "./file.js";
 import { logger } from "./logger.js";
 
+let totalDataUsage = 0;
+
+function formatDataUsage(bytesCount) {
+    if (bytesCount >= 1024 * 1024) {
+        return `${(bytesCount / (1024 * 1024)).toFixed(2)}MB`;
+    } else if(bytesCount >= 1024) {
+        return `${(bytesCount / 1024).toFixed(2)}KB`;
+    }
+    return `${bytesCount}B`
+}
+
+function formatUptime(seconds) {
+    const years = Math.floor(seconds / (365 * 24 * 60 * 60));
+    const days = Math.floor((seconds % (365 * 24 * 60 * 60)) / (24 * 60 * 60));
+    const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((seconds % (60 * 60)) / 60);
+
+    let formattedUptime = [];
+    if (years > 0) formattedUptime.push(`${years} year${years > 1 ? 's' : ''}`);
+    if (days > 0) formattedUptime.push(`${days} day${days > 1 ? 's' : ''}`);
+    if (hours > 0) formattedUptime.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+    if (minutes > 0) formattedUptime.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+
+    return formattedUptime.join(', '); 
+}
+
 export async function createConnection(token, proxy = null) {
     const wsOptions = {};
     if (proxy) {
@@ -51,12 +77,19 @@ export async function createConnection(token, proxy = null) {
 
     socket.on("message", (data) => {
         const message = data.toString();
+        totalDataUsage += message.length;
+        const dataUsage = formatDataUsage(totalDataUsage)
+
         try {
             const parsedMessage = JSON.parse(message);
+            
             if (parsedMessage.type === "serverMetrics") {
                 const { totalEarnings, totalUptime, creditsEarned } = parsedMessage.data;
-                logger(`Heartbeat sent for provider: ${token}`);
-                logger(`Total uptime: ${totalUptime} seconds | Credits earned:`, creditsEarned);
+                const formattedUptime = formatUptime(totalUptime);
+
+                logger(`Heartbeat sent for provider:`, token, "success");
+
+                logger(`Uptime:${formattedUptime}| Credits earn: ${creditsEarned}| Bandwidth Used: ${dataUsage}`);
             } else if (parsedMessage.type === "acknowledged") {
                 logger("System Updated:", message, "warn");
             } else if (parsedMessage.type === "error" && parsedMessage.data.code === "Invalid body") {
@@ -64,19 +97,19 @@ export async function createConnection(token, proxy = null) {
                 socket.send(JSON.stringify(systemData));
             }
         } catch (error) {
-            logger("Error parsing message:", "error");
+            logger("Error parsing message:", error,"error");
         }
     });
 
     socket.on("close", () => {
-        logger("WebSocket connection closed for token:", token, "warn");
+        logger("WebSocket connection closed", "","warn");
         setTimeout(() => {
-            logger("Attempting to reconnect for token:", token, "warn");
+            logger("Attempting to reconnect", "","warn");
             createConnection(token, proxy); 
         }, 5000);
     });
 
     socket.on("error", (error) => {
-        logger("WebSocket error for token:", token, "error");
+        logger("WebSocket error:", error, "error");
     });
 }
