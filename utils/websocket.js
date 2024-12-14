@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import { HttpsProxyAgent } from "https-proxy-agent";
+import { SocksProxyAgent } from 'socks-proxy-agent';
 import { generateRandomId, generateRandomSystemData } from "./system.js";
 import { delay } from "./file.js";
 import { logger } from "./logger.js";
@@ -34,7 +35,11 @@ export async function createConnection(token, proxy = null) {
     const wsOptions = {};
     if (proxy) {
         logger(`Connect Using proxy: ${proxy}`);
-        wsOptions.agent = new HttpsProxyAgent(proxy);
+        if (proxy.startsWith('socks://') || proxy.startsWith('socks4://') || proxy.startsWith('socks5://')) {
+            wsOptions.agent = new SocksProxyAgent(proxy);
+        } else {
+            wsOptions.agent = new HttpsProxyAgent(proxy);
+        }
     }
 
     const socket = new WebSocket(`wss://ws.oasis.ai/?token=${token}`, wsOptions);
@@ -89,7 +94,7 @@ export async function createConnection(token, proxy = null) {
 
                 logger(`Heartbeat sent for provider:`, token, "success");
 
-                logger(`Uptime:${formattedUptime}| Credits earn: ${creditsEarned}| Bandwidth Used: ${dataUsage}`);
+                logger(`Total Uptime: ${formattedUptime} | Credits earn: ${creditsEarned} | Total Bandwidth Used: ${dataUsage}`);
             } else if (parsedMessage.type === "acknowledged") {
                 logger("System Updated:", message, "warn");
             } else if (parsedMessage.type === "error" && parsedMessage.data.code === "Invalid body") {
