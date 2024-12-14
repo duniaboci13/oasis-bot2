@@ -73,9 +73,10 @@ AI inference powered by distributed compute
 
 4. put your proxy to `proxy.txt` format `http://username:pass@ip:port` or `socks5://username:pass@ip:port`,
    - if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider (1 : 1).
-     ```bash
-     nano proxy.txt
-     ```
+
+   ```bash
+   nano proxy.txt
+   ```
 
 6. Setup to create accounts/login and get Tokens:
 
