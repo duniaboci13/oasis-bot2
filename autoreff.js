@@ -2,6 +2,7 @@ import Mailjs from "@cemalgnlts/mailjs";
 import axios from "axios";
 import fs from 'fs';
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
 import readline from "readline/promises";
 import { delay } from "./utils/file.js";
 import { logger } from "./utils/logger.js";
@@ -32,7 +33,7 @@ function readProxies(filePath) {
 }
 
 async function verifyEmail(code, proxy) {
-    const proxyAgent = new HttpsProxyAgent(proxy);
+    const agent = (proxy.startsWith('socks://') || proxy.startsWith('socks4://') || proxy.startsWith('socks5://')) ? new SocksProxyAgent(proxy) : new HttpsProxyAgent(proxy);
     const url = "https://api.oasis.ai/internal/authVerifyEmail?batch=1";
     const payload = {
         "0": {
@@ -45,7 +46,7 @@ async function verifyEmail(code, proxy) {
     try {
         const response = await axios.post(url, payload, {
             headers: { "Content-Type": "application/json" },
-            httpsAgent: proxyAgent,
+            httpsAgent: agent,
         });
         return response.data[0].result.data;
     } catch (error) {
@@ -97,7 +98,7 @@ async function checkForNewEmails(proxy) {
 
 // Send signup request
 async function sendSignupRequest(email, password, proxy, referralCode) {
-    const proxyAgent = new HttpsProxyAgent(proxy);
+    const agent = (proxy.startsWith('socks://') || proxy.startsWith('socks4://') || proxy.startsWith('socks5://')) ? new SocksProxyAgent(proxy) : undefined;
     const url = "https://api.oasis.ai/internal/authSignup?batch=1";
     const payload = {
         "0": {
@@ -112,7 +113,7 @@ async function sendSignupRequest(email, password, proxy, referralCode) {
     try {
         const response = await axios.post(url, payload, {
             headers: { "Content-Type": "application/json" },
-            httpsAgent: proxyAgent,
+            httpsAgent: agent,
         });
         logger(`Signup successful for`, email, 'success');
         return { email, status: "success", data: response.data };
