@@ -1,19 +1,9 @@
 import { readToken, delay } from "./utils/file.js";
 import { createConnection } from "./utils/websocket.js";
-import chalk from 'chalk';
+import { showBanner } from "./utils/banner.js";
 
 async function start() {
-
-    const banner = `
-        ===========================
-        ====                   ====
-        ==== OASIS NETWORK BOT ====
-        ====                   ====
-        ===========================
-    `
-
-    console.log(chalk.red(banner));
-    
+    showBanner();
     const tokens = await readToken("providers.txt");
     const proxies = await readToken("proxy.txt");
 
