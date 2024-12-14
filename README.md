@@ -13,7 +13,9 @@ AI inference powered by distributed compute
 
 - **Total Bandwidth Used**
 
-- **Clearer Total Uptime for Provider**
+- **Clearer Total Uptime for Each Provider**
+
+- **Support SOCKS Proxy Format**
 
 ## Features
 
@@ -62,7 +64,7 @@ AI inference powered by distributed compute
    nano accounts.txt
    ```
 
-4. put your proxy to `proxy.txt` format `http://username:pass@ip:port`, if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider.
+4. put your proxy to `proxy.txt` format `http://username:pass@ip:port` or `socks5://username:pass@ip:port`, if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider.
 
    ```bash
    nano proxy.txt
