@@ -71,25 +71,25 @@ AI inference powered by distributed compute
    nano accounts.txt
    ```
 
-4. put your proxy to `proxy.txt` format `http://username:pass@ip:port` or `socks5://username:pass@ip:port`, if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider.
+4. put your proxy to `proxy.txt` format `http://username:pass@ip:port` or `socks5://username:pass@ip:port`,
+   - if you want create multiple providers you need to put multiple proxy there 1 proxy for 1 provider (1 : 1).
+     ```bash
+     nano proxy.txt
+     ```
 
-   ```bash
-   nano proxy.txt
-   ```
-
-5. Setup to create accounts/login and get Tokens:
+6. Setup to create accounts/login and get Tokens:
 
    ```bash
    npm run setup
    ```
 
-6. Run The Script:
+7. Run The Script:
 
    ```bash
    npm run start
    ```
 
-7. Additional feature auto refferal
+8. Additional feature auto refferal
    ```bash
    npm run autoreff
    ```
