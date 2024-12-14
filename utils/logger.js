@@ -12,5 +12,5 @@ export function logger(message, value = '', level = 'info') {
     };
     
     const log = levels[level] || chalk.whiteBright;
-    console.log(log(`[${formattedDate}] [${level.toUpperCase()}]: ${message}`, chalk.yellowBright(value)));
+    console.log(log(`[${formattedDate}] | [${level.toUpperCase()}]: ${message}`, chalk.yellowBright(value)));
 }
