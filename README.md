@@ -45,7 +45,11 @@ AI inference powered by distributed compute
      ```bash
      npm --v
      ```
-     
+- If node.js is not installed, please refer to this link.
+  - [How to Install Node.js on Windows](https://www.geeksforgeeks.org/install-node-js-on-windows/)
+  - [How to Install Node.js on Linux](https://www.geeksforgeeks.org/installation-of-node-js-on-linux/)
+  - [How to Install Node.js on Termux](https://wiki.termux.com/index.php?title=Node.js&mobileaction=toggle_view_mobile)
+ 
 # How to Use
 
 1. Clone this repository:
