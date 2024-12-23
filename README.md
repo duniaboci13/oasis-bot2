@@ -8,6 +8,7 @@ AI inference powered by distributed compute
 # Good Proxy for OASIS
 - [Cherry Proxy](https://center.cherryproxy.com/Login/Register?invite=gshadowz)
 - [922 Proxy](https://www.922proxy.com/register?inviter_code=gshadowz)
+- [ABC Proxy](https://www.abcproxy.com/?code=605NOU06)
 
 # Features
 
