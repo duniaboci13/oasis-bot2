@@ -4,23 +4,21 @@ import { logger } from './logger.js';
 
 // Function to register user
 async function registerUser(email, password) {
-    const url = 'https://api.oasis.ai/internal/authSignup?batch=1';
+    const url = 'https://api.oasis.ai/internal/auth/signup';
+
     const payload = {
-        "0": {
-        "json": {
-            email: email,
-            password: password, 
-            referralCode: "fra1156"
-            }
-        }
-    };
+        email: email,
+        password: password,
+        referralCode: 'fra1156'
+    }
+
     const headers = {
         'Content-Type': 'application/json',
     };
 
     try {
         const response = await axios.post(url, payload, { headers });
-        if (response.data[0].result) {
+        if (response.data) {
             logger('register successful:', email);
             logger('Check Your inbox for verification email');
             return true;
@@ -32,15 +30,12 @@ async function registerUser(email, password) {
 }
 // Function to login a user
 async function loginUser(email, password) {
-    const url = 'https://api.oasis.ai/internal/authLogin?batch=1';
+    const url = 'https://api.oasis.ai/internal/auth/login';
+
     const payload = {
-        "0": {
-            "json": {
-                email: email,
-                password: password,
-                rememberSession: true
-            }
-        }
+        email,
+        password,
+        rememberSession: true
     };
 
     const headers = {
@@ -50,7 +45,7 @@ async function loginUser(email, password) {
     try {
         const response = await axios.post(url, payload, { headers });
         logger('Login successful:', email);
-        return response.data[0].result.data.json.token;
+        return response.data.token;
     } catch (error) {
         logger(`Login error for ${email}:`, error.response ? error.response.data[0] : error.response.statusText, 'error');
         logger('Please Check Your inbox to verification your email', email, 'error');
