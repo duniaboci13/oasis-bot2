@@ -1,14 +1,15 @@
 import { generateRandomId } from "./system.js";
-import { readToken, saveToken } from "./file.js";
+import { readToken, saveProviders, saveToken } from "./file.js";
 import { logger } from "./logger.js";
 import axios from 'axios';
+import fs from 'fs';
 
 async function connectWithToken(token) {
     const url = 'https://api.oasis.ai/internal/auth/connect';
     const randomId = generateRandomId();
     const payload = {
         "name": randomId,
-        "platform": "headless"
+        "platform": "browser"
     };
 
     const headers = {
@@ -27,19 +28,76 @@ async function connectWithToken(token) {
     }
 }
 
+async function getAllProviders(token) {
+    const url = 'https://api.oasis.ai/internal/provider/providers?limit=100';
+
+    const headers = {
+        'Authorization': token,
+    }
+
+    try {
+        const response = await axios.get(url, { headers });
+        const data = response.data;
+        logger('Get All Providers successful');
+        return data
+    } catch (error) {
+        logger('Get All Providers error:', error.response ? error.response.status : error.response.statusText, 'error');
+        return null;
+    }
+}
+
+async function deleteProviders(token, nodeId) {
+    const url = `https://api.oasis.ai/internal/provider/?id=${nodeId}`;
+    const headers = {
+        'Authorization': token,
+    }
+
+    try {
+        const response = await axios.delete(url, { headers });
+        const data = response.data;
+
+        return data
+    } catch (error) {
+        logger('Delete Providers error:', error.response ? error.response.status : error.response.statusText, 'error');
+        return null;
+    }
+}
+
 export async function createProviders(numID) {
     try {
         const tokens = await readToken('tokens.txt');
+        const filePath = 'providers.txt';
+
+        if (fs.existsSync(filePath)) {
+            try {
+                fs.unlinkSync(filePath);
+                logger(`Deleted existing providers file: ${filePath}`);
+            } catch (error) {
+                logger(`Error deleting existing providers file: ${filePath}`, error, 'error');
+            }
+        }
+
         for (const token of tokens) { 
-            logger(`Creating Providers using token: ${token}`);
+            logger(`Checking all providers using token: ${token}`);
+            const response = await getAllProviders(token);
+            const nodeIds = response.results.map(item=> item.id);
+
+            logger(`Found ${nodeIds.length} existing providers, trying to delete old providers...`);
+            
+            for (const nodeId of nodeIds) {
+                await deleteProviders(token, nodeId);
+                logger(`${nodeIds.length - nodeIds.indexOf(nodeId)}/${nodeIds.length} | Providers ${nodeId} was successfully deleted. `);
+            };
+
+            logger(`Creating new providers using token: ${token}`);
+            
             for (let i = 0; i < numID; i++) {
                 logger(`Creating Providers #${i + 1}....`);
                 const logToken = await connectWithToken(token);
                 if (logToken) {
-                    saveToken("providers.txt", logToken)
+                    saveProviders("providers.txt", logToken)
                 } else {
                     logger('Failed to create provider', 'error', 'error');
-                    continue;
                 }
             };
             

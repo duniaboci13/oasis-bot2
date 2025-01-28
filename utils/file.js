@@ -6,13 +6,8 @@ export function readToken(filePath) {
         fs.readFile(filePath, 'utf8', (err, data) => {
             if (err) return reject(err);
 
-            const tokens = data.split('\n').map(token => token.trim()).filter(token => token);
-            
-            if (tokens.length > 0) {
-                resolve(tokens);  
-            } else {
-                reject('No tokens found');
-            }
+            const tokens = data.split('\n').map(token => token.trim()).filter(token => token);         
+            resolve(tokens);  
         });
     });
 }
@@ -55,6 +50,17 @@ export function saveToken(filePath, token) {
         }
     });
 }
+
+export function saveProviders(filePath, providersId) {
+    fs.appendFile(filePath, `${providersId}\n`, (err) => {
+        if (err) {
+            logger('Error saving providers:', err);
+        } else {
+            logger('Providers saved successfully.');
+        }
+    });
+}
+
 export function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

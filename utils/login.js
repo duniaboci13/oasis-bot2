@@ -45,6 +45,7 @@ async function loginUser(email, password) {
     try {
         const response = await axios.post(url, payload, { headers });
         logger('Login successful:', email);
+        
         return response.data.token;
     } catch (error) {
         logger(`Login error for ${email}:`, error.response ? error.response.data[0] : error.response.statusText, 'error');
@@ -59,6 +60,7 @@ export async function loginFromFile(filePath) {
         const accounts = await readAccounts(filePath);
         let successCount = 0;
 
+        logger(`Attempting login and get tokens for ${accounts.length} accounts...`);
         for (const account of accounts) {
             logger(`Attempting login for ${account.email}`);
             const token = await loginUser(account.email, account.password);
