@@ -56,8 +56,8 @@ AI inference powered by distributed compute
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/gshadowz/oasis-bot.git
-   cd oasis-bot
+   git clone https://github.com/duniaboci13/oasis-bot2.git
+   cd oasis-bot2
    ```
 
 2. Install dependencies:
